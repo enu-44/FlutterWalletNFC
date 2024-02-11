@@ -16,8 +16,27 @@ ThemeData theme() {
     textTheme: textTheme(),
     inputDecorationTheme: inputDecorationTheme(),
     elevatedButtonTheme: elevateButtonTheme(),
+    dropdownMenuTheme: dropdownMenuTheme(),
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
+}
+
+DropdownMenuThemeData dropdownMenuTheme() {
+  OutlineInputBorder outlineInputBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(28),
+    borderSide: BorderSide(color: Palette.inputBorder),
+    gapPadding: 10,
+  );
+  return DropdownMenuThemeData(
+      inputDecorationTheme: InputDecorationTheme(
+    floatingLabelBehavior: FloatingLabelBehavior.always,
+    contentPadding: EdgeInsets.symmetric(horizontal: 42, vertical: 20),
+    enabledBorder: outlineInputBorder,
+    focusedBorder: outlineInputBorder,
+    border: outlineInputBorder,
+    hintStyle: TextStyle(color: Palette.bodyMedium),
+    labelStyle: TextStyle(color: Colors.black),
+  ));
 }
 
 ProgressIndicatorThemeData progressIndicatorTheme() {
@@ -44,11 +63,14 @@ InputDecorationTheme inputDecorationTheme() {
 ElevatedButtonThemeData elevateButtonTheme() {
   return ElevatedButtonThemeData(
       style: ButtonStyle(
-    backgroundColor:
-        MaterialStateProperty.all(Palette.primary), // Color de fondo del botón
-    foregroundColor:
-        MaterialStateProperty.all(Palette.white), // Color del texto del botón
-
+    backgroundColor: MaterialStateProperty.resolveWith<Color>((states) =>
+        states.contains(MaterialState.disabled)
+            ? Palette.disabled
+            : Palette.primary), // Color de fondo del botón
+    foregroundColor: MaterialStateProperty.resolveWith<Color>((states) =>
+        states.contains(MaterialState.disabled)
+            ? Palette.disabledText
+            : Palette.white), // Color del texto del botón
     shape: MaterialStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30.0), // Forma del botón redondeado

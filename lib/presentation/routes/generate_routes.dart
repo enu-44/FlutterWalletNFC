@@ -6,6 +6,8 @@ import 'package:pago_facil_app/presentation/pages/auth/login/phone/phone_auth_cu
 import 'package:pago_facil_app/presentation/pages/auth/login/phone/phone_auth_screen.dart';
 import 'package:pago_facil_app/presentation/pages/auth/register/register.cubit.dart';
 import 'package:pago_facil_app/presentation/pages/auth/register/register_screen.dart';
+import 'package:pago_facil_app/presentation/pages/home/home_cubit.dart';
+import 'package:pago_facil_app/presentation/pages/home/home_screen.dart';
 import 'package:pago_facil_app/presentation/pages/not_found/not_found_screen.dart';
 import 'package:pago_facil_app/presentation/pages/splash/splash_cubit.dart';
 import 'package:pago_facil_app/presentation/pages/splash/splash_screen.dart';
@@ -22,6 +24,8 @@ class GenerateRoute {
           buildBlocProvider(const PasswordAuthScreen(), PasswordAuthCubit())),
       AppRoutes.register: routeBuilder(
           buildBlocProvider(const RegisterScreen(), RegisterCubit())),
+      AppRoutes.home:
+          routeBuilder(buildBlocProvider(const HomeScreen(), HomeCubit())),
     };
     return routes[settings.name] ??
         MaterialPageRoute(builder: (_) => const NoPageFoundScreen());

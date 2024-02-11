@@ -18,21 +18,24 @@ class InputWidget extends StatefulWidget {
   final TextInputType? inputType;
   final IconData? icons;
   final int? maxLines;
-
-  const InputWidget({
-    this.key,
-    this.controller,
-    this.isPassword = false,
-    this.hintText,
-    this.labelText,
-    this.helperText,
-    this.onSaved,
-    this.validator,
-    this.onFieldSubmitted,
-    this.inputType,
-    this.icons,
-    this.maxLines = 1,
-  }) : super(key: key);
+  final FocusNode? focusNode;
+  final void Function(String)? onChanged;
+  const InputWidget(
+      {this.key,
+      this.controller,
+      this.isPassword = false,
+      this.hintText,
+      this.labelText,
+      this.helperText,
+      this.onSaved,
+      this.validator,
+      this.onFieldSubmitted,
+      this.inputType,
+      this.icons,
+      this.maxLines = 1,
+      this.focusNode,
+      this.onChanged})
+      : super(key: key);
 
   @override
   State<InputWidget> createState() => _InputWidgetState();
@@ -43,8 +46,8 @@ class _InputWidgetState extends State<InputWidget> {
 
   @override
   void initState() {
-    super.initState();
     _oscureTextSubject = BehaviorSubject<bool>.seeded(widget.isPassword);
+    super.initState();
   }
 
   Stream<bool> get oscureTextStream => _oscureTextSubject.stream;
@@ -61,10 +64,12 @@ class _InputWidgetState extends State<InputWidget> {
         stream: oscureTextStream,
         builder: (context, snapshot) {
           return TextFormField(
+            focusNode: widget.focusNode,
             cursorColor: Palette.bodyMedium,
             controller: widget.controller,
             keyboardType: widget.inputType,
             key: widget.key,
+            onChanged: widget.onChanged,
             obscureText: snapshot.data ?? false,
             onSaved: widget.onSaved,
             validator: widget.validator,

@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 class ButtonWidget extends StatelessWidget {
   const ButtonWidget(
-      {Key? key, required this.text, this.onTap, this.padding, this.icon})
+      {Key? key,
+      required this.text,
+      this.onTap,
+      this.padding,
+      this.icon,
+      this.disabled = false})
       : super(key: key);
   final String text;
   final void Function()? onTap;
   final EdgeInsetsGeometry? padding;
   final IconData? icon;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,7 @@ class ButtonWidget extends StatelessWidget {
         width: double.infinity,
         height: 60.0,
         child: ElevatedButton(
-          onPressed: onTap,
+          onPressed: disabled ? null : onTap,
           child: icon != null
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
