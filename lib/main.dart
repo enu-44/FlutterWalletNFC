@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pago_facil_app/presentation/config/size_config.dart';
-import 'package:pago_facil_app/presentation/routes/app_routes.dart';
-import 'package:pago_facil_app/presentation/routes/generate_routes.dart';
-import 'package:pago_facil_app/presentation/theme/theme.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+import 'package:pago_facil_app/core/routes/app_routes.dart';
+import 'package:pago_facil_app/core/routes/generate_routes.dart';
+import 'package:pago_facil_app/core/theme/pago_facil_theme.dart';
 
 void main() {
+  Intl.defaultLocale = 'es_ES'; // PM
+  initializeDateFormatting();
   runApp(const PagoFacilApp());
 }
 
@@ -12,13 +15,11 @@ class PagoFacilApp extends StatelessWidget {
   const PagoFacilApp({super.key});
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return MaterialApp(
-      title: 'Pago Facil',
-      theme: theme(),
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: GenerateRoute.route,
-      initialRoute: AppRoutes.splash,
-    );
+        title: 'Pago Facil',
+        theme: FlutPagoFacilTheme.light,
+        debugShowCheckedModeBanner: false,
+        onGenerateRoute: GenerateRoute.route,
+        initialRoute: AppRoutes.receivedMoney);
   }
 }
