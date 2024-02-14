@@ -27,17 +27,26 @@ class FlutPagoFacilTheme {
     colors: _flutCinematicFlexShemeData.light,
     fontFamily: FontFamily.muli,
   ).copyWith(
-    progressIndicatorTheme: _progressIndicatorTheme,
-    scaffoldBackgroundColor: Colors.white,
-    appBarTheme: _appBarTheme,
-    textTheme: textTheme,
-    inputDecorationTheme: _inputDecorationTheme,
-    elevatedButtonTheme: _elevateButtonTheme,
-    textButtonTheme: _textButtonTheme,
-    dropdownMenuTheme: _dropdownMenuTheme,
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    floatingActionButtonTheme: _floatingButtonTheme,
-  );
+      progressIndicatorTheme: _progressIndicatorTheme,
+      scaffoldBackgroundColor: Colors.white,
+      appBarTheme: _appBarTheme,
+      textTheme: textTheme,
+      inputDecorationTheme: _inputDecorationTheme,
+      elevatedButtonTheme: _elevateButtonTheme,
+      textButtonTheme: _textButtonTheme,
+      dropdownMenuTheme: _dropdownMenuTheme,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+      floatingActionButtonTheme: _floatingButtonTheme,
+      tabBarTheme: _tabBarTheme);
+
+  static TabBarTheme get _tabBarTheme => TabBarTheme(
+        labelColor: Colors.white,
+        unselectedLabelColor: Palette.primary,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: Palette.primary,
+        ),
+      );
 
   static OutlineInputBorder get _formFieldOutlineBorder => OutlineInputBorder(
         borderRadius: BorderRadius.circular(28),

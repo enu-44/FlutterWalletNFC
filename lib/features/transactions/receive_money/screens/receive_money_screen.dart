@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pago_facil_app/core/core.dart';
+import 'package:pago_facil_app/features/transactions/receive_money/receive_money.dart';
 import 'package:pago_facil_app/features/transactions/shared/shared.dart';
 
 class ReceiveMoneyScreen extends StatelessWidget {
@@ -7,6 +9,7 @@ class ReceiveMoneyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<ReceiveMoneyCubit>();
     return Scaffold(
       appBar: DefaultAppBarWidget(
         context: context,
@@ -14,30 +17,34 @@ class ReceiveMoneyScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 10.0),
-              EnterAccountFormWidget(
-                onValidate: () {},
-                accountNumberController: TextEditingController(),
-                userFullNameController:
-                    TextEditingController(text: "Enuar Munoz Castillo"),
-              ),
-              NfcFormWidget(
-                accountNumberController:
-                    TextEditingController(text: "12*******2334"),
-                userFullNameController:
-                    TextEditingController(text: "Enuar Munoz Castillo"),
-              ),
-              const SizedBox(height: 10.0),
-              TransactionFormWidget(
-                amountController: TextEditingController(),
-                conceptController: TextEditingController(),
-              ),
-            ],
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+          child: _builFormWidget(cubit),
         ),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: kBottomNavigationBarHeight,
+        child: Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: ButtonWidget(
+              text: "Continuar",
+              icon: Icons.arrow_circle_right,
+              onTap: () => {},
+            )),
+      ),
+    );
+  }
+
+  Widget _builFormWidget(ReceiveMoneyCubit cubit) {
+    return Form(
+      key: cubit.formReceiveKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: Column(
+        children: [
+          TransactionFormWidget(
+            amountController: cubit.ammountController,
+            conceptController: cubit.conceptController,
+          ),
+        ],
       ),
     );
   }

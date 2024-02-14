@@ -24,6 +24,7 @@ class CommonFormWidget extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Image.asset(AssetConst.nfc, width: 50, height: 50),
           ),
+        if (showBtnValidate) const SizedBox(height: 10.0),
         if (showBtnValidate)
           Row(
             children: [
@@ -43,6 +44,11 @@ class CommonFormWidget extends StatelessWidget {
           _buildAccountFormField(accountNumberController),
         const SizedBox(height: 10.0),
         _buildFullNameFormField(userFullNameController),
+        if (!enabledAccountNumber)
+          Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: const Text("Por favor acerque el dispositivo NFC a leer")),
       ],
     );
   }
@@ -72,7 +78,6 @@ class CommonFormWidget extends StatelessWidget {
       inputType: TextInputType.number,
       validator: (value) => FormValidatorsUtils.validate([
         (_) => FormValidatorsUtils.requiredField(value),
-        (_) => FormValidatorsUtils.maxLength(value, 20)
       ]),
     );
   }

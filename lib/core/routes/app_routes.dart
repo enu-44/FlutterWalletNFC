@@ -9,4 +9,6 @@ class AppRoutes {
   //Home
   static const String home = '/home';
   static const String receivedMoney = '/receivedMoney';
+  static const String sendMoney = '/sendMoney';
+  static const String rechargeBalance = '/rechargeBalance';
 }

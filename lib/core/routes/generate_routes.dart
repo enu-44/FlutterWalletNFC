@@ -26,6 +26,10 @@ class GenerateRoute {
       )),
       AppRoutes.receivedMoney: routeBuilder(
           buildBlocProvider(const ReceiveMoneyScreen(), ReceiveMoneyCubit())),
+      AppRoutes.sendMoney: routeBuilder(
+          buildBlocProvider(const SendMoneyScreen(), SendMoneyCubit())),
+      AppRoutes.rechargeBalance: routeBuilder(buildBlocProvider(
+          const RechargeBalanceWidget(), RechargeBalanceCubit())),
     };
     return routes[settings.name] ??
         MaterialPageRoute(builder: (_) => const NoPageFoundScreen());

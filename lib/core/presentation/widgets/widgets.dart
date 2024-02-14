@@ -8,3 +8,4 @@ export 'appbar/appbar.dart';
 export 'buttons/buttons.dart';
 export 'card/card.dart';
 export 'inputs/inputs.dart';
+export 'tabbar_widgget.dart';

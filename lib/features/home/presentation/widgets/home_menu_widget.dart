@@ -11,9 +11,7 @@ class HomeMenuWidget extends StatelessWidget {
       SpeedDialChild(
         child: const Icon(Icons.arrow_upward),
         label: 'Recarga',
-        onTap: () {
-          // Add your functionality here
-        },
+        onTap: () => Navigator.pushNamed(context, AppRoutes.rechargeBalance),
       ),
       SpeedDialChild(
         child: const Icon(Icons.arrow_downward),
@@ -23,9 +21,7 @@ class HomeMenuWidget extends StatelessWidget {
       SpeedDialChild(
         child: const Icon(Icons.arrow_right_alt),
         label: 'Envia',
-        onTap: () {
-          // Add your functionality here
-        },
+        onTap: () => Navigator.pushNamed(context, AppRoutes.sendMoney),
       ),
     ]);
   }

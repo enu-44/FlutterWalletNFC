@@ -30,8 +30,7 @@ class TransactionFormWidget extends StatelessWidget {
       inputType: TextInputType.text,
       validator: (value) => FormValidatorsUtils.validate([
         (_) => FormValidatorsUtils.requiredField(value),
-        (_) => FormValidatorsUtils.maxLength(value, 20),
-        (_) => FormValidatorsUtils.numericOrDecimalsOnly(value)
+        (_) => FormValidatorsUtils.maxLength(value, 400),
       ]),
     );
   }
