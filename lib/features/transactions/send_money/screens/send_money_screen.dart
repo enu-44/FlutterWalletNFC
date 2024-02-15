@@ -36,21 +36,25 @@ class SendMoneyScreen extends StatelessWidget {
         child: ButtonWidget(
           text: "Continuar",
           icon: Icons.arrow_circle_right,
-          onTap: () async {
-            if (cubit.tabIndex == 0 &&
-                !cubit.formSendNfcKey.currentState!.validate()) return;
-            if (cubit.tabIndex == 1 &&
-                !cubit.formSendEditAccountKey.currentState!.validate()) return;
-
-            final bool result = await AlertDialogCustom.confirm(context,
-                title: 'Confirmar',
-                message:
-                    'Confirmar envio a ${cubit.accountFullNameController.text}');
-            if (result) {}
-          },
+          onTap: () => _handleNext(context, cubit),
         ),
       ),
     );
+  }
+
+  Future<void> _handleNext(BuildContext context, SendMoneyCubit cubit) async {
+    FocusScope.of(context).unfocus();
+    if (cubit.tabIndex == 0 && !cubit.formSendNfcKey.currentState!.validate()) {
+      return;
+    }
+    if (cubit.tabIndex == 1 &&
+        !cubit.formSendEditAccountKey.currentState!.validate()) return;
+
+    final bool result = await AlertDialogCustom.confirm(context,
+        title: 'Confirmar',
+        message:
+            'Confirmar envio a ${cubit.accountFullNameController.text} por ${cubit.ammountController.text}');
+    if (result) {}
   }
 
   Widget _builFormWidget(Key? formKey, SendMoneyCubit cubit,

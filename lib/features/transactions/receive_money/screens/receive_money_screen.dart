@@ -7,22 +7,21 @@ import 'package:pago_facil_app/features/transactions/shared/shared.dart';
 class ReceiveMoneyScreen extends StatelessWidget {
   const ReceiveMoneyScreen({super.key});
 
-  _cubitListener(BuildContext _, ReceivedMoneyState state) async {
-    final cubit = _.read<ReceiveMoneyCubit>();
-
+  void _cubitListener(
+      BuildContext _, ReceivedMoneyState state, ReceiveMoneyCubit cubit) async {
     if (state is ReceivedMoneyToReadNfc) cubit.validateNfc();
-    if (state is ReceivedMoneyErrorNfc) {
-      AlertDialogCustom.info(_, title: 'Notificacion', message: state.message);
+    if (state is ReceivedMoneyErrorNfc || state is ReceivedMoneyFailure) {
+      await AlertDialogCustom.info(_,
+          title: 'Notificacion', message: state.message);
     }
     if (state is ReceivedMoneySuccess) {
+      if (!_.mounted) return;
       await AlertDialogCustom.info(_,
           title: 'Notificacion', message: state.message);
       if (!_.mounted) return;
       Navigator.pushReplacementNamed(_, AppRoutes.home);
     }
     if (state is ReceivedMoneyFailure) {
-      await AlertDialogCustom.info(_,
-          title: 'Notificacion', message: state.message);
       cubit.emitState(ReceivedMoneyState.successNfc());
     }
   }
@@ -31,7 +30,7 @@ class ReceiveMoneyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ReceiveMoneyCubit>();
     return BlocListener<ReceiveMoneyCubit, ReceivedMoneyState>(
-        listener: (_, state) => _cubitListener(_, state),
+        listener: (_, state) => _cubitListener(_, state, cubit),
         child: BlocBuilder<ReceiveMoneyCubit, ReceivedMoneyState>(
             builder: (BuildContext _, ReceivedMoneyState state) {
           return Scaffold(
@@ -72,7 +71,7 @@ class ReceiveMoneyScreen extends StatelessWidget {
             disabled: state is ReceivedMoneyLoading ||
                 state is ReceivedMoneyValidatingNfc,
             icon: Icons.arrow_circle_right,
-            onTap: () => _onTapNext(context, state),
+            onTap: () => _handleNext(context, state),
           ),
         ));
   }
@@ -107,8 +106,7 @@ class ReceiveMoneyScreen extends StatelessWidget {
     return const SizedBox.shrink();
   }
 
-  Future<void> _onTapNext(
-      BuildContext context, ReceivedMoneyState state) async {
+  void _handleNext(BuildContext context, ReceivedMoneyState state) {
     FocusScope.of(context).unfocus();
     final cubit = context.read<ReceiveMoneyCubit>();
     if (state is ReceivedMoneySuccessNfc) _handleConfirm(context, cubit);
@@ -116,7 +114,7 @@ class ReceiveMoneyScreen extends StatelessWidget {
     if (state is ReceivedMoneyErrorNfc) cubit.validateNfc();
   }
 
-  void _handleFormAmountValidate(ReceiveMoneyCubit cubit) async {
+  void _handleFormAmountValidate(ReceiveMoneyCubit cubit) {
     if (!cubit.formReceiveAmountKey.currentState!.validate()) return;
     cubit.goReadToNfc();
   }
