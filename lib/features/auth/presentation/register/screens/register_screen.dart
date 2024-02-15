@@ -17,8 +17,9 @@ class RegisterScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
           title: const Text('Registrate'),
+          backgroundColor: Palette.white,
+          foregroundColor: Palette.black,
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),

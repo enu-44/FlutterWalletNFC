@@ -20,6 +20,6 @@ class PagoFacilApp extends StatelessWidget {
         theme: FlutPagoFacilTheme.light,
         debugShowCheckedModeBanner: false,
         onGenerateRoute: GenerateRoute.route,
-        initialRoute: AppRoutes.home);
+        initialRoute: AppRoutes.splash);
   }
 }

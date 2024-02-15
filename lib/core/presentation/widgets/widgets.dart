@@ -9,3 +9,5 @@ export 'buttons/buttons.dart';
 export 'card/card.dart';
 export 'inputs/inputs.dart';
 export 'tabbar_widgget.dart';
+export 'badget_widget.dart';
+export 'alert_dialog_widget.dart';

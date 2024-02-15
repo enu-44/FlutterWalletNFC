@@ -30,6 +30,10 @@ class GenerateRoute {
           buildBlocProvider(const SendMoneyScreen(), SendMoneyCubit())),
       AppRoutes.rechargeBalance: routeBuilder(buildBlocProvider(
           const RechargeBalanceWidget(), RechargeBalanceCubit())),
+      AppRoutes.nfcDevices: routeBuilder(buildBlocProvider(
+          const NfcDevicesScreen(), NfcDevicesCubit()..load())),
+      AppRoutes.nfcPairingDevice: routeBuilder(buildBlocProvider(
+          const NfcDevicePairingScreen(), NfcDevicesPairingCubit())),
     };
     return routes[settings.name] ??
         MaterialPageRoute(builder: (_) => const NoPageFoundScreen());

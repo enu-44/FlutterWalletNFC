@@ -16,7 +16,8 @@ class PasswordAuthScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Palette.white,
+          foregroundColor: Palette.black,
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -65,7 +66,9 @@ class PasswordAuthScreen extends StatelessWidget {
         inputType: TextInputType.number,
         validator: (value) => FormValidatorsUtils.validate([
           (_) => FormValidatorsUtils.requiredField(value),
-          (_) => FormValidatorsUtils.numericOnly(value)
+          (_) => FormValidatorsUtils.numericOnly(value),
+          (_) => FormValidatorsUtils.minLength(value, 4),
+          (_) => FormValidatorsUtils.maxLength(value, 5),
         ]),
       ),
     );

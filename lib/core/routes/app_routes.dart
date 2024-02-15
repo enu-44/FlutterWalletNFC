@@ -8,7 +8,13 @@ class AppRoutes {
 
   //Home
   static const String home = '/home';
+
+  //Transactions
   static const String receivedMoney = '/receivedMoney';
   static const String sendMoney = '/sendMoney';
   static const String rechargeBalance = '/rechargeBalance';
+
+  //Devices
+  static const String nfcDevices = '/nfcDevices';
+  static const String nfcPairingDevice = '/nfcPairingDevice';
 }

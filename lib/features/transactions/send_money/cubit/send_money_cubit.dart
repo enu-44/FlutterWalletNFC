@@ -8,6 +8,8 @@ class SendMoneyCubit extends Cubit<SendMoneyState> {
   final formSendNfcKey = GlobalKey<FormState>();
   final formSendEditAccountKey = GlobalKey<FormState>();
 
+  int tabIndex = 0;
+
   final accountNumberController = TextEditingController();
   final accountFullNameController = TextEditingController();
   final ammountController = TextEditingController();

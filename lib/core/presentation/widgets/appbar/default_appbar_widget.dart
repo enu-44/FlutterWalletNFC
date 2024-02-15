@@ -22,6 +22,6 @@ class DefaultAppBarWidget extends AppBarWidget {
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () => Navigator.of(context).pop(),
                 )
-              : null,
+              : const SizedBox.shrink(),
         );
 }

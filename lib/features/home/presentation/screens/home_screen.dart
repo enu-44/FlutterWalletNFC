@@ -23,9 +23,27 @@ class HomeScreen extends StatelessWidget {
         },
       ),
       body: _buildBody(),
-      endDrawer: const DrawerWidget(),
+      endDrawer: DrawerWidget(
+        children: _buildDrawerMenu(context),
+      ),
       floatingActionButton: const HomeMenuWidget(),
     );
+  }
+
+  List<Widget> _buildDrawerMenu(BuildContext context) {
+    return <Widget>[
+      const SizedBox(height: 30.0),
+      ListTile(
+        leading: const Icon(Icons.settings),
+        title: const Text("Configurar NFC"),
+        onTap: () => Navigator.pushNamed(context, AppRoutes.nfcDevices),
+      ),
+      ListTile(
+        leading: const Icon(Icons.logout),
+        title: const Text("Cerrar Sesion"),
+        onTap: () => Navigator.pushReplacementNamed(context, AppRoutes.splash),
+      ),
+    ];
   }
 
   Widget _buildBody() {

@@ -1,23 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:pago_facil_app/core/core.dart';
 
-class TabBarWidget extends StatelessWidget {
+class TabBarWidget extends StatefulWidget {
   final List<String> tabTitles;
   final List<Widget> tabViews;
   final EdgeInsetsGeometry tabViewPadding;
+  final Function(int)? onTabChanged;
 
   const TabBarWidget({
-    super.key,
+    Key? key,
     required this.tabTitles,
     required this.tabViews,
     this.tabViewPadding =
         const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-  });
+    this.onTabChanged,
+  }) : super(key: key);
+
+  @override
+  _TabBarWidgetState createState() => _TabBarWidgetState();
+}
+
+class _TabBarWidgetState extends State<TabBarWidget>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        TabController(length: widget.tabTitles.length, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _handleTabSelection() {
+    int tabIndex = _tabController.index;
+    if (widget.onTabChanged != null) {
+      widget.onTabChanged!(tabIndex);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: tabTitles.length,
+      length: widget.tabTitles.length,
       child: Column(
         children: [
           Material(
@@ -26,10 +57,11 @@ class TabBarWidget extends StatelessWidget {
               height: 50,
               color: Colors.white,
               child: TabBar(
+                controller: _tabController, // Usar el controlador TabController
                 physics: const ClampingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 tabs: List.generate(
-                  tabTitles.length,
+                  widget.tabTitles.length,
                   (index) => Tab(
                     child: Container(
                       height: 50,
@@ -39,7 +71,7 @@ class TabBarWidget extends StatelessWidget {
                       ),
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text(tabTitles[index]),
+                        child: Text(widget.tabTitles[index]),
                       ),
                     ),
                   ),
@@ -49,9 +81,10 @@ class TabBarWidget extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: tabViewPadding,
+              padding: widget.tabViewPadding,
               child: TabBarView(
-                children: tabViews,
+                controller: _tabController,
+                children: widget.tabViews,
               ),
             ),
           )

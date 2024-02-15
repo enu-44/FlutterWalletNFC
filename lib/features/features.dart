@@ -5,3 +5,4 @@ export 'movements/movements.dart';
 export 'not_found/notfound.dart';
 export 'splash/splash.dart';
 export 'transactions/transactions.dart';
+export 'devices/devices.dart';

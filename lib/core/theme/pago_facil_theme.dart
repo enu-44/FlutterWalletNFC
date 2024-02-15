@@ -1,6 +1,5 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pago_facil_app/core/theme/palette.dart';
 import 'package:pago_facil_app/core/theme/text/text_theme.dart';
 import 'package:pago_facil_app/core/typography/fonts.dart';
@@ -14,11 +13,11 @@ class FlutPagoFacilTheme {
     description: 'Pago Facil theme, custom definition of all colors',
     light: FlexSchemeColor(
       primary: Palette.primary,
-      secondary: Palette.red,
+      secondary: Palette.secondary,
     ),
     dark: FlexSchemeColor(
       primary: Palette.primary,
-      secondary: Palette.red,
+      secondary: Palette.secondary,
     ),
   );
 
@@ -111,10 +110,10 @@ class FlutPagoFacilTheme {
             .copyWith(decorationColor: Palette.primary),
       );
   static AppBarTheme get _appBarTheme => const AppBarTheme(
-      elevation: 4,
-      foregroundColor: Palette.white,
-      backgroundColor: Palette.primary,
-      systemOverlayStyle: SystemUiOverlayStyle.light);
+        backgroundColor: Palette.primary,
+        foregroundColor: Palette.white,
+        elevation: 0.0,
+      );
 
   static FloatingActionButtonThemeData get _floatingButtonTheme =>
       const FloatingActionButtonThemeData(

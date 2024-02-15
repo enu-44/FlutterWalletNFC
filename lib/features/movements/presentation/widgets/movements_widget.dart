@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pago_facil_app/features/movements/movements.dart';
@@ -22,7 +24,8 @@ class MovementsWidget extends StatelessWidget {
               movementType: MovementType.envio,
               amount: 540,
               concept: "Prestamo",
-              movementDate: DateTime.now().subtract(const Duration(hours: 48)),
+              movementDate: DateTime.now()
+                  .subtract(Duration(minutes: Random().nextInt(10000))),
               referencia: "WEAD12345",
             );
           }, childCount: state.movements.length),

@@ -34,7 +34,7 @@ class TextareaWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InputWidget(
-        inputType: TextInputType.multiline,
+        inputType: TextInputType.text,
         controller: controller,
         isPassword: false,
         helperText: hintText,

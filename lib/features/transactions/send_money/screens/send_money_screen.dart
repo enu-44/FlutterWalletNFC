@@ -16,6 +16,7 @@ class SendMoneyScreen extends StatelessWidget {
         labelTitle: "Envia Plata ",
       ),
       body: TabBarWidget(
+        onTabChanged: (int tabIndex) => cubit.tabIndex = tabIndex,
         tabTitles: const ["Leer NFC", "Ingresar Cuenta"],
         tabViews: [
           _builFormWidget(cubit.formSendNfcKey, cubit, enabledNfc: true),
@@ -23,43 +24,61 @@ class SendMoneyScreen extends StatelessWidget {
               enabledNfc: false),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: kBottomNavigationBarHeight,
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: ButtonWidget(
-              text: "Continuar",
-              icon: Icons.arrow_circle_right,
-              onTap: () => {},
-            )),
+      bottomNavigationBar: _buildNextButtonWidget(context, cubit),
+    );
+  }
+
+  Widget _buildNextButtonWidget(BuildContext context, SendMoneyCubit cubit) {
+    return SizedBox(
+      height: kBottomNavigationBarHeight,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: ButtonWidget(
+          text: "Continuar",
+          icon: Icons.arrow_circle_right,
+          onTap: () async {
+            if (cubit.tabIndex == 0 &&
+                !cubit.formSendNfcKey.currentState!.validate()) return;
+            if (cubit.tabIndex == 1 &&
+                !cubit.formSendEditAccountKey.currentState!.validate()) return;
+
+            final bool result = await AlertDialogCustom.confirm(context,
+                title: 'Confirmar',
+                message:
+                    'Confirmar envio a ${cubit.accountFullNameController.text}');
+            if (result) {}
+          },
+        ),
       ),
     );
   }
 
   Widget _builFormWidget(Key? formKey, SendMoneyCubit cubit,
       {required bool enabledNfc}) {
-    return Form(
-      key: formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: Column(
-        children: [
-          if (enabledNfc)
-            NfcFormWidget(
-              accountNumberController: cubit.accountNumberController,
-              userFullNameController: cubit.accountFullNameController,
-            )
-          else
-            EnterAccountFormWidget(
-              onValidate: () {},
-              accountNumberController: cubit.accountNumberController,
-              userFullNameController: cubit.accountFullNameController,
+    return SingleChildScrollView(
+      child: Form(
+        key: formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(
+          children: [
+            if (enabledNfc)
+              NfcFormWidget(
+                accountNumberController: cubit.accountNumberController,
+                userFullNameController: cubit.accountFullNameController,
+              )
+            else
+              EnterAccountFormWidget(
+                onValidate: () {},
+                accountNumberController: cubit.accountNumberController,
+                userFullNameController: cubit.accountFullNameController,
+              ),
+            const SizedBox(height: 20.0),
+            TransactionFormWidget(
+              amountController: cubit.ammountController,
+              conceptController: cubit.conceptController,
             ),
-          const SizedBox(height: 20.0),
-          TransactionFormWidget(
-            amountController: cubit.ammountController,
-            conceptController: cubit.conceptController,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
