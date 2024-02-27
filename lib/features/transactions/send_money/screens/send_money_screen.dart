@@ -2,88 +2,84 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pago_facil_app/core/core.dart';
 import 'package:pago_facil_app/features/transactions/send_money/send_money.dart';
-import 'package:pago_facil_app/features/transactions/shared/shared.dart';
 
 class SendMoneyScreen extends StatelessWidget {
   const SendMoneyScreen({super.key});
 
+  void _cubitListener(
+      BuildContext _, SendMoneyState state, SendMoneyCubit cubit) async {
+    FocusScope.of(_).unfocus();
+    if (state is SendMoneyFailure || state is SendMoneyWalletInvalid) {
+      CustomDialog.info(_, message: state.message);
+    }
+    if (state is SendMoneySuccess) {
+      CustomDialog.info(_, message: state.message).then((value) =>
+          Navigator.pushNamedAndRemoveUntil(_, AppRoutes.home, (_) => false));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SendMoneyCubit>();
-    return Scaffold(
-      appBar: DefaultAppBarWidget(
-        context: context,
-        labelTitle: "Envia Plata ",
+    cubit.onValidateSupportNfc();
+    return BlocListener<SendMoneyCubit, SendMoneyState>(
+      listener: (_, state) => _cubitListener(_, state, cubit),
+      child: Scaffold(
+        appBar: DefaultAppBarWidget(
+          showBackButton: true,
+          context: context,
+          labelTitle: "Envia Plata ",
+        ),
+        body: _buildContentBody(cubit),
+        bottomNavigationBar: _buildNextButton(context, cubit),
       ),
-      body: TabBarWidget(
+    );
+  }
+
+  Widget _buildContentBody(SendMoneyCubit cubit) => TabBarWidget(
         onTabChanged: (int tabIndex) => cubit.tabIndex = tabIndex,
         tabTitles: const ["Leer NFC", "Ingresar Cuenta"],
         tabViews: [
-          _builFormWidget(cubit.formSendNfcKey, cubit, enabledNfc: true),
-          _builFormWidget(cubit.formSendEditAccountKey, cubit,
-              enabledNfc: false),
-        ],
-      ),
-      bottomNavigationBar: _buildNextButtonWidget(context, cubit),
-    );
-  }
-
-  Widget _buildNextButtonWidget(BuildContext context, SendMoneyCubit cubit) {
-    return SizedBox(
-      height: kBottomNavigationBarHeight,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        child: ButtonWidget(
-          text: "Continuar",
-          icon: Icons.arrow_circle_right,
-          onTap: () => _handleNext(context, cubit),
-        ),
-      ),
-    );
-  }
-
-  Future<void> _handleNext(BuildContext context, SendMoneyCubit cubit) async {
-    FocusScope.of(context).unfocus();
-    if (cubit.tabIndex == 0 && !cubit.formSendNfcKey.currentState!.validate()) {
-      return;
-    }
-    if (cubit.tabIndex == 1 &&
-        !cubit.formSendEditAccountKey.currentState!.validate()) return;
-
-    final bool result = await AlertDialogCustom.confirm(context,
-        title: 'Confirmar',
-        message:
-            'Confirmar envio a ${cubit.accountFullNameController.text} por ${cubit.ammountController.text}');
-    if (result) {}
-  }
-
-  Widget _builFormWidget(Key? formKey, SendMoneyCubit cubit,
-      {required bool enabledNfc}) {
-    return SingleChildScrollView(
-      child: Form(
-        key: formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Column(
-          children: [
-            if (enabledNfc)
-              NfcFormWidget(
-                accountNumberController: cubit.accountNumberController,
-                userFullNameController: cubit.accountFullNameController,
-              )
-            else
-              EnterAccountFormWidget(
-                onValidate: () {},
-                accountNumberController: cubit.accountNumberController,
-                userFullNameController: cubit.accountFullNameController,
-              ),
-            const SizedBox(height: 20.0),
-            TransactionFormWidget(
-              amountController: cubit.ammountController,
-              conceptController: cubit.conceptController,
+          SingleChildScrollView(
+            child: SendNfcFormWidget(
+              cubit: cubit,
+              formKey: cubit.formNfcKey,
             ),
-          ],
+          ),
+          SingleChildScrollView(
+            child: WalletFormWidget(
+              cubit: cubit,
+              formKey: cubit.formWalletKey,
+              onValidate: () => cubit.onValidateWalletNumber(),
+            ),
+          )
+        ],
+      );
+
+  Widget _buildNextButton(BuildContext _, SendMoneyCubit cubit) => SizedBox(
+        height: kBottomNavigationBarHeight,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: BlocBuilder<SendMoneyCubit, SendMoneyState>(
+            builder: (BuildContext _, SendMoneyState state) {
+              return ButtonWidget(
+                text: state is SendMoneyLoading ? state.message : "Continuar",
+                disabled: state is! SendMoneyWalletValid &&
+                    state is! SendMoneyFailure,
+                icon: Icons.arrow_circle_right,
+                onTap: () => _onNext(_, cubit),
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+
+  Future<void> _onNext(BuildContext _, SendMoneyCubit cubit) async {
+    FocusScope.of(_).unfocus();
+    if (!cubit.isValidForm()) return;
+    final bool result = await CustomDialog.confirm(_,
+        message:
+            'Confirmar envío a ${cubit.walletUserFullNameCtrl.text} por ${MoneyFormatUtils.getMoneyFormat(value: double.parse(cubit.amountCtrl.text))}');
+    if (result) cubit.onSendTransaction();
   }
 }

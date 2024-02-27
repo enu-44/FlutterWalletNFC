@@ -20,7 +20,7 @@ class HomeMenuWidget extends StatelessWidget {
       ),
       SpeedDialChild(
         child: const Icon(Icons.arrow_right_alt),
-        label: 'Envia',
+        label: 'Envía',
         onTap: () => Navigator.pushNamed(context, AppRoutes.sendMoney),
       ),
     ]);

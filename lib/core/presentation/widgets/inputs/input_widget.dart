@@ -85,7 +85,9 @@ class _InputWidgetState extends State<InputWidget> {
               labelText: widget.labelText,
               hintText: widget.hintText,
               suffixIcon: GestureDetector(
-                  onTap: () => _oscureTextSubject.add(!oscureTextvalue()),
+                  onTap: () => widget.isPassword
+                      ? _oscureTextSubject.add(!oscureTextvalue())
+                      : null,
                   child: widget.isPassword == true
                       ? _createWidgetPassword(snapshot.data ?? false)
                       : Icon(widget.icons)

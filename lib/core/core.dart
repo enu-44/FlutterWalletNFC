@@ -1,5 +1,5 @@
 export 'constants/constansts.dart';
-export 'di/di.dart';
+export 'injector/injector.dart';
 export 'presentation/presentation.dart';
 export 'routes/routes.dart';
 export 'utils/utils.dart';

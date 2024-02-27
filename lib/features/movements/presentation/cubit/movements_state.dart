@@ -1,8 +1,10 @@
+import 'package:pago_facil_app/layers/layers.dart';
+
 abstract class MovementsState {
   MovementsState();
   factory MovementsState.initial() => MovementsInitial();
-  factory MovementsState.success(List<dynamic> movements) =>
-      MovementsSuccess(movements);
+  factory MovementsState.success(List<Movement> movements) =>
+      movements.isEmpty ? MovementsEmpty() : MovementsSuccess(movements);
   factory MovementsState.failure() => MovementsFailure();
   factory MovementsState.loading() => MovementsLoading();
 }
@@ -10,7 +12,7 @@ abstract class MovementsState {
 class MovementsInitial extends MovementsState {}
 
 class MovementsSuccess extends MovementsState {
-  final List<dynamic> movements;
+  final List<Movement> movements;
   MovementsSuccess(this.movements) : super();
 }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pago_facil_app/core/core.dart';
-import 'package:pago_facil_app/features/transactions/recharge_balance/cubit/recharge_balance_cubit.dart';
+import 'package:pago_facil_app/features/transactions/recharge_balance/recharge_balance.dart';
 
 class RechargeFormWidget extends StatelessWidget {
   const RechargeFormWidget({super.key});
@@ -15,11 +15,20 @@ class RechargeFormWidget extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 15.0),
-          _buildBanksFormField(cubit.bankController),
+          _buildBanksFormField(cubit.bankCtrl),
           const SizedBox(height: 15.0),
-          _buildBankAccountTypeFormField(cubit.bankAccountTypeController),
+          _buildBankAccountTypeFormField(cubit.bankAccountTypeCtrl),
           const SizedBox(height: 15.0),
-          _buildAmountFormField(cubit.ammountController),
+          _buildAmountFormField(cubit.amountCtrl),
+          const SizedBox(height: 10.0),
+          BlocBuilder<RechargeBalanceCubit, RechargeBalanceState>(
+            builder: (BuildContext _, RechargeBalanceState state) {
+              if (state is RechargeBalanceLoading) {
+                return const CircularProgressIndicator();
+              }
+              return const SizedBox.shrink();
+            },
+          )
         ],
       ),
     );
@@ -28,8 +37,8 @@ class RechargeFormWidget extends StatelessWidget {
   Widget _buildBankAccountTypeFormField(TextEditingController controller) {
     return DropdownWidget<String>(
         labelText: "Tipo de cuenta",
-        hintText: "Seleccione una opcion",
-        items: banksAccountType,
+        hintText: "Seleccione una opción",
+        items: MasterListConst.banksAccountType,
         controller: controller,
         displayText: (item) => item);
   }
@@ -37,8 +46,8 @@ class RechargeFormWidget extends StatelessWidget {
   Widget _buildBanksFormField(TextEditingController controller) {
     return DropdownWidget<String>(
         labelText: "Banco",
-        hintText: "Seleccione una opcion",
-        items: banks,
+        hintText: "Seleccione una opción",
+        items: MasterListConst.banks,
         controller: controller,
         displayText: (item) => item);
   }

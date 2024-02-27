@@ -15,6 +15,7 @@ class TextareaWidget extends StatelessWidget {
   final FocusNode? focusNode;
   final void Function(String)? onChanged;
   final TextEditingController? controller;
+  final bool enabled;
 
   const TextareaWidget(
       {this.key,
@@ -28,25 +29,28 @@ class TextareaWidget extends StatelessWidget {
       this.inputType,
       this.icons,
       this.focusNode,
-      this.onChanged})
+      this.onChanged,
+      this.enabled = true})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InputWidget(
-        inputType: TextInputType.text,
-        controller: controller,
-        isPassword: false,
-        helperText: hintText,
-        labelText: labelText,
-        hintText: helperText,
-        onSaved: onSaved,
-        validator: validator,
-        onFieldSubmitted: onFieldSubmitted,
-        icons: icons,
-        maxLines: 4,
-        minLines: 2,
-        focusNode: focusNode,
-        onChanged: onChanged);
+      inputType: TextInputType.text,
+      controller: controller,
+      isPassword: false,
+      helperText: hintText,
+      labelText: labelText,
+      hintText: helperText,
+      onSaved: onSaved,
+      validator: validator,
+      onFieldSubmitted: onFieldSubmitted,
+      icons: icons,
+      maxLines: 4,
+      minLines: 2,
+      focusNode: focusNode,
+      onChanged: onChanged,
+      enabled: enabled,
+    );
   }
 }
