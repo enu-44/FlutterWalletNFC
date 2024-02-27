@@ -8,10 +8,8 @@ class NfcPairingCubit extends Cubit<NfcPairingState> {
   NfcPairingCubit(this._nfcRepository) : super(NfcPairingState.initial());
 
   final INfcRepository _nfcRepository;
-
   final formKey = GlobalKey<FormState>();
   final serialNfcCtrl = TextEditingController();
-  final ValueNotifier<bool> enabledButton = ValueNotifier<bool>(false);
 
   Future<void> onValidateSupportNfc() async {
     final isAvailable = await NfcUtils.isAvailable();
@@ -31,13 +29,12 @@ class NfcPairingCubit extends Cubit<NfcPairingState> {
 
   void _startNfc() => NfcUtils.startSession(onNfc: (String value) {
         serialNfcCtrl.text = value;
-        enabledButton.value = true;
+        emit(NfcPairingState.readed());
       });
 
   @override
   Future<void> close() {
     serialNfcCtrl.dispose();
-    enabledButton.dispose();
     NfcUtils.closeNfc();
     return super.close();
   }

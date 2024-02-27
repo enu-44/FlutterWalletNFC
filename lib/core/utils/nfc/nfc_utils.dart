@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:pago_facil_app/core/utils/utils.dart';
 

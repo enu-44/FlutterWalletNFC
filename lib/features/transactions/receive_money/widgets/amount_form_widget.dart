@@ -8,15 +8,13 @@ class AmountFormWidget extends StatelessWidget {
   final bool enabledInputs;
 
   @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: cubit.formReceiveAmountKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: SharedTransactionFormWidget(
-        amountController: cubit.amountCtrl,
-        conceptController: cubit.conceptCtrl,
-        enabledInputs: enabledInputs,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Form(
+        key: cubit.formReceiveAmountKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: SharedTransactionFormWidget(
+          amountController: cubit.amountCtrl,
+          conceptController: cubit.conceptCtrl,
+          enabledInputs: enabledInputs,
+        ),
+      );
 }

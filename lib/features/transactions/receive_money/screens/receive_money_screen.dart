@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pago_facil_app/core/core.dart';
 import 'package:pago_facil_app/features/transactions/receive_money/receive_money.dart';
+import 'package:pago_facil_app/features/transactions/transactions.dart';
 
 class ReceiveMoneyScreen extends StatelessWidget {
   const ReceiveMoneyScreen({super.key});
@@ -57,27 +58,20 @@ class ReceiveMoneyScreen extends StatelessWidget {
                 cubit: cubit,
                 enabledInputs: state is ReceivedMoneyInitial,
               ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              FutureBuilder(
-                future: Future.value(true), //NfcUtils.isAvailable(),
-                builder: (context, snapshot) {
-                  if (snapshot.data == false) {
-                    return state is ReceivedMoneyToReadNfc
-                        ? const Center(child: UnsupportedNfcWidget())
-                        : const SizedBox.shrink();
-                  }
-                  if (state is ReceivedMoneyInitial) {
-                    return const SizedBox.shrink();
-                  }
-                  return ReceiveNfcFormWidget(cubit: cubit);
-                },
-              ),
+              const SizedBox(height: 10.0),
+              _buildNfc(cubit, state),
               if (cubit.isLoading(state)) const CircularProgressIndicator()
             ],
           ),
         ),
+      );
+  Widget _buildNfc(ReceiveMoneyCubit cubit, ReceivedMoneyState state) =>
+      SharedNfcSupportWidget(
+        buildContent: () {
+          if (state is ReceivedMoneyInitial) return const SizedBox.shrink();
+          return ReceiveNfcFormWidget(cubit: cubit);
+        },
+        shouldShowUnsupported: () => state is ReceivedMoneyToReadNfc,
       );
 
   Widget _buildNextButton(ReceiveMoneyCubit cubit, ReceivedMoneyState state,

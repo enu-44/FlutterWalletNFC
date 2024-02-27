@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pago_facil_app/core/core.dart';
 import 'package:pago_facil_app/features/transactions/send_money/send_money.dart';
 import 'package:pago_facil_app/features/transactions/shared/shared.dart';
 
@@ -11,17 +10,8 @@ class SendNfcFormWidget extends StatelessWidget {
   final Key? formKey;
   final SendMoneyCubit cubit;
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: NfcUtils.isAvailable(),
-      builder: (context, snapshot) {
-        if (snapshot.data == false) {
-          return const Center(child: UnsupportedNfcWidget());
-        }
-        return _buildFormNfc();
-      },
-    );
-  }
+  Widget build(BuildContext context) =>
+      SharedNfcSupportWidget(buildContent: () => _buildFormNfc());
 
   Widget _buildFormNfc() {
     return Form(

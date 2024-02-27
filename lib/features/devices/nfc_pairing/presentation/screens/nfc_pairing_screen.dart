@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pago_facil_app/core/core.dart';
 import 'package:pago_facil_app/features/devices/devices.dart';
+import 'package:pago_facil_app/features/transactions/transactions.dart';
 
 class NfcPairingScreen extends StatelessWidget {
   const NfcPairingScreen({super.key});
@@ -38,43 +39,33 @@ class NfcPairingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContentBody(BuildContext context, NfcPairingCubit cubit) {
-    return FutureBuilder(
-      future: NfcUtils.isAvailable(),
-      builder: (context, snapshot) {
-        if (snapshot.data == false) {
-          return const Center(child: UnsupportedNfcWidget());
-        }
-        return const Padding(
+  Widget _buildContentBody(BuildContext context, NfcPairingCubit cubit) =>
+      SharedNfcSupportWidget(
+        buildContent: () => const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           child: NfcPairingFormWidget(),
-        );
-      },
-    );
-  }
+        ),
+      );
 
   Widget _buildNextButton(NfcPairingCubit cubit) {
     return SizedBox(
       height: kBottomNavigationBarHeight,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10.0),
-        child: ValueListenableBuilder(
-          valueListenable: cubit.enabledButton,
-          builder: (_, bool value, child) {
-            return BlocBuilder<NfcPairingCubit, NfcPairingState>(
-              builder: (BuildContext _, NfcPairingState state) {
-                return ButtonWidget(
-                  text:
-                      state is NfcPairingLoading ? state.message : "Continuar",
-                  disabled: state is NfcPairingLoading || !value,
-                  icon: Icons.arrow_circle_right,
-                  onTap: () => cubit.onRegisterNfc(),
-                );
-              },
+        child: BlocBuilder<NfcPairingCubit, NfcPairingState>(
+          builder: (BuildContext _, NfcPairingState state) {
+            return ButtonWidget(
+              text: state is NfcPairingLoading ? state.message : "Continuar",
+              disabled: _shouldDisabledBtn(state),
+              icon: Icons.arrow_circle_right,
+              onTap: () => cubit.onRegisterNfc(),
             );
           },
         ),
       ),
     );
   }
+
+  bool _shouldDisabledBtn(NfcPairingState state) =>
+      state is! NfcPairingReaded && state is! NfcPairingFailure;
 }
