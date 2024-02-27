@@ -15,24 +15,30 @@ class RegisterFormWidget extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 15.0),
-          _buildFullNameFormField(cubit.fullNameController),
+          _buildFullNameFormField(cubit.fullNameCtrl),
           const SizedBox(height: 15.0),
           _buildIdTypeFormField(cubit.idTypeController),
           const SizedBox(height: 15.0),
-          _buildIdNumberFormField(cubit.idNumberController),
+          _buildIdNumberFormField(cubit.idNumberCtrl),
           const SizedBox(height: 15.0),
-          _buildPhoneFormField(cubit.phoneController),
+          _buildPhoneFormField(cubit.phoneCtrl),
           const SizedBox(height: 15.0),
-          _buildPasswordFormField(cubit.passwordController),
+          _buildPasswordFormField(cubit.passwordCtrl),
           const SizedBox(height: 15.0),
-          _buildConfirmPasswordFormField(
-              cubit.confirmPasswordController, context),
+          _buildConfirmPasswordFormField(cubit.confirmPasswordCtrl, context),
           const SizedBox(height: 15.0),
-          _buildAccepTermsFormField(cubit.acceptTermsConditionsController)
+          _buildAccepTermsFormField(cubit.acceptTermsConditionsCtrl),
+          const SizedBox(height: 10.0),
+          _buildLoading()
         ],
       ),
     );
   }
+
+  Widget _buildLoading() => BlocBuilder<RegisterCubit, RegisterState>(
+      builder: (BuildContext _, RegisterState state) => state is RegisterLoading
+          ? const CircularProgressIndicator()
+          : const SizedBox.shrink());
 
   Widget _buildFullNameFormField(TextEditingController controller) {
     return InputWidget(
@@ -43,15 +49,15 @@ class RegisterFormWidget extends StatelessWidget {
       inputType: TextInputType.text,
       validator: (value) => FormValidatorsUtils.validate([
         (_) => FormValidatorsUtils.requiredField(value),
-        (_) => FormValidatorsUtils.maxLength(value, 20)
+        (_) => FormValidatorsUtils.maxLength(value, 40)
       ]),
     );
   }
 
   Widget _buildIdTypeFormField(TextEditingController controller) {
     return DropdownWidget<String>(
-        labelText: "Tipo de Identificacion",
-        hintText: "Seleccione una opcion",
+        labelText: "Tipo de Identificación",
+        hintText: "Seleccione una opción",
         items: identificationsType,
         controller: controller,
         displayText: (item) => item);
@@ -60,10 +66,10 @@ class RegisterFormWidget extends StatelessWidget {
   Widget _buildIdNumberFormField(TextEditingController controller) {
     return InputWidget(
       controller: controller,
-      hintText: "Ingresar Identificacion",
-      labelText: "Identificacion",
+      hintText: "Ingresar Identificación",
+      labelText: "Identificación",
       icons: Icons.numbers,
-      inputType: TextInputType.text,
+      inputType: TextInputType.number,
       validator: (value) => FormValidatorsUtils.validate([
         (_) => FormValidatorsUtils.requiredField(value),
         (_) => FormValidatorsUtils.numericOnly(value),
@@ -76,8 +82,8 @@ class RegisterFormWidget extends StatelessWidget {
   Widget _buildPhoneFormField(TextEditingController controller) {
     return InputWidget(
       controller: controller,
-      hintText: "Ingresar Telefono",
-      labelText: "Telefono",
+      hintText: "Ingresar Teléfono",
+      labelText: "Teléfono",
       icons: Icons.phone,
       inputType: TextInputType.number,
       validator: (value) => FormValidatorsUtils.validate([
@@ -96,6 +102,7 @@ class RegisterFormWidget extends StatelessWidget {
       labelText: "Clave",
       icons: Icons.lock,
       inputType: TextInputType.number,
+      isPassword: true,
       validator: (value) => FormValidatorsUtils.validate([
         (_) => FormValidatorsUtils.requiredField(value),
         (_) => FormValidatorsUtils.numericOnly(value),
@@ -113,14 +120,15 @@ class RegisterFormWidget extends StatelessWidget {
       labelText: "Confirmar Clave",
       icons: Icons.lock,
       inputType: TextInputType.number,
+      isPassword: true,
       validator: (value) => FormValidatorsUtils.validate([
         (_) => FormValidatorsUtils.requiredField(value),
         (_) => FormValidatorsUtils.numericOnly(value),
         (_) => FormValidatorsUtils.minLength(value, 4),
         (_) => FormValidatorsUtils.maxLength(value, 5),
         (_) => FormValidatorsUtils.confirmEqual(
-            value, context.read<RegisterCubit>().passwordController.text,
-            message: () => 'El valor de la contrasena no coincide')
+            value, context.read<RegisterCubit>().passwordCtrl.text,
+            message: () => 'El valor de la clave no coincide')
       ]),
     );
   }

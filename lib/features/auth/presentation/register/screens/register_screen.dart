@@ -9,11 +9,14 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterCubit, RegisterState>(
-      listener: (context, state) {
+      listener: (_, state) {
+        FocusScope.of(context).unfocus();
         if (state is RegisterSuccess) {
-          Navigator.pushNamed(context, AppRoutes.home);
+          Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (_) => false);
         }
-        if (state is RegisterFailure) {}
+        if (state is RegisterFailure) {
+          CustomDialog.info(context, message: state.message);
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -21,41 +24,45 @@ class RegisterScreen extends StatelessWidget {
           backgroundColor: Palette.white,
           foregroundColor: Palette.black,
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: _contentWidget(context),
-        ),
-        bottomNavigationBar: SizedBox(
-          height: kBottomNavigationBarHeight,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: ValueListenableBuilder(
-              valueListenable:
-                  context.read<RegisterCubit>().acceptTermsConditionsController,
-              builder: (context, bool value, child) {
-                return ButtonWidget(
-                  text: "Continuar",
-                  disabled: value == false,
-                  icon: Icons.arrow_circle_right,
-                  onTap: () => _submitForm(context),
-                );
-              },
-            ),
-          ),
-        ),
+        body: _buildContentBody(),
+        bottomNavigationBar: _buildNextButton(context),
       ),
     );
   }
 
-  Widget _contentWidget(BuildContext context) {
-    return const SingleChildScrollView(
-      child: RegisterFormWidget(),
-    );
-  }
+  Widget _buildContentBody() => const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        child: SingleChildScrollView(
+          child: RegisterFormWidget(),
+        ),
+      );
 
-  void _submitForm(BuildContext context) {
-    if (context.read<RegisterCubit>().formKey.currentState!.validate()) {
-      Navigator.pushNamed(context, AppRoutes.home);
-    }
+  Widget _buildNextButton(BuildContext context) => SizedBox(
+        height: kBottomNavigationBarHeight,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: ValueListenableBuilder(
+            valueListenable:
+                context.read<RegisterCubit>().acceptTermsConditionsCtrl,
+            builder: (_, bool value, child) {
+              return BlocBuilder<RegisterCubit, RegisterState>(
+                builder: (BuildContext __, RegisterState state) {
+                  return ButtonWidget(
+                    text:
+                        state is RegisterLoading ? state.message : "Continuar",
+                    disabled: state is RegisterLoading || value == false,
+                    icon: Icons.arrow_circle_right,
+                    onTap: () => _onSubmit(context),
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      );
+
+  void _onSubmit(BuildContext _) {
+    if (!_.read<RegisterCubit>().isValidForm()) return;
+    _.read<RegisterCubit>().onRegister();
   }
 }

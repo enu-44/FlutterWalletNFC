@@ -27,16 +27,18 @@ class DateFormatUtils {
   static String convertToTimeLine(DateTime? date) {
     if (date == null) return '';
     final now = DateTime.now();
-    final difference = now.difference(date);
+    final nowFormat = DateTime.utc(now.year, now.month, now.day, now.hour,
+        now.minute, now.second, now.millisecond, now.microsecond);
+    final difference = nowFormat.difference(date);
     if (difference.inSeconds < 60) {
       return 'Hace un momento';
     } else if (difference.inMinutes < 60) {
       return 'Hace ${difference.inMinutes} minutos';
-    } else if (difference.inHours < 24 && now.day == date.day) {
+    } else if (difference.inHours < 24 && nowFormat.day == date.day) {
       return 'Hace ${difference.inHours} horas';
-    } else if (now.day - 1 == date.day &&
-        now.month == date.month &&
-        now.year == date.year) {
+    } else if (nowFormat.day - 1 == date.day &&
+        nowFormat.month == date.month &&
+        nowFormat.year == date.year) {
       final formatter = DateFormat('hh:mm a'); // Formato de hora
       return 'Ayer a las ${formatter.format(date)}';
     } else {

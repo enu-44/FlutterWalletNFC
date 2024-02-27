@@ -8,7 +8,7 @@ class Palette {
   static const Color greyDark = Color.fromARGB(255, 85, 85, 85);
   static const Color black = Color.fromARGB(255, 0, 0, 0);
   static const Color red = Color.fromARGB(255, 236, 1, 1);
-  static const Color active = Color.fromARGB(255, 4, 193, 105);
+  static const Color green = Color.fromARGB(255, 11, 151, 86);
 
   static const Color grey = Color.fromARGB(255, 138, 156, 165);
   static const Color transparent = Colors.transparent;

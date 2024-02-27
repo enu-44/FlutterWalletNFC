@@ -4,9 +4,8 @@ abstract class ReceivedMoneyState {
 
   factory ReceivedMoneyState.initial() => ReceivedMoneyInitial();
   factory ReceivedMoneyState.toReadNfc() => ReceivedMoneyToReadNfc();
-  factory ReceivedMoneyState.validatingNfc() => ReceivedMoneyValidatingNfc();
-  factory ReceivedMoneyState.successNfc() => ReceivedMoneySuccessNfc();
-  factory ReceivedMoneyState.errorNfc() => ReceivedMoneyErrorNfc();
+  factory ReceivedMoneyState.walletValid() => ReceivedMoneyWalletValid();
+  factory ReceivedMoneyState.walletInvalid() => ReceivedMoneyWalletInvalid();
   factory ReceivedMoneyState.loading() => ReceivedMoneyLoading();
   factory ReceivedMoneyState.success() => ReceivedMoneySuccess();
   factory ReceivedMoneyState.failure() => ReceivedMoneyFailure();
@@ -16,16 +15,12 @@ class ReceivedMoneyInitial extends ReceivedMoneyState {}
 
 class ReceivedMoneyToReadNfc extends ReceivedMoneyState {}
 
-class ReceivedMoneyValidatingNfc extends ReceivedMoneyState {
-  ReceivedMoneyValidatingNfc({super.message = "Validando NFC..."});
-}
+class ReceivedMoneyWalletValid extends ReceivedMoneyState {}
 
-class ReceivedMoneySuccessNfc extends ReceivedMoneyState {}
-
-class ReceivedMoneyErrorNfc extends ReceivedMoneyState {
-  ReceivedMoneyErrorNfc(
+class ReceivedMoneyWalletInvalid extends ReceivedMoneyState {
+  ReceivedMoneyWalletInvalid(
       {super.message =
-          "El dispositivo NFC, no se encuentra activo o no esta adminitido..."});
+          "El dispositivo NFC, no se encuentra activo o no esta admitido..."});
 }
 
 class ReceivedMoneyLoading extends ReceivedMoneyState {
@@ -33,11 +28,11 @@ class ReceivedMoneyLoading extends ReceivedMoneyState {
 }
 
 class ReceivedMoneySuccess extends ReceivedMoneyState {
-  ReceivedMoneySuccess({super.message = "Se realizo la recarga correctamente"});
+  ReceivedMoneySuccess({super.message = "Se realizó el pago correctamente"});
 }
 
 class ReceivedMoneyFailure extends ReceivedMoneyState {
   ReceivedMoneyFailure(
       {super.message =
-          "Ocurrio un error en la transaccion, reintente de nuevo"});
+          "Ocurrio un error en la transacción, reintente de nuevo"});
 }

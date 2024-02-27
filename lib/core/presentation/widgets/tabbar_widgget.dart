@@ -29,7 +29,7 @@ class _TabBarWidgetState extends State<TabBarWidget>
     super.initState();
     _tabController =
         TabController(length: widget.tabTitles.length, vsync: this);
-    _tabController.addListener(_handleTabSelection);
+    _tabController.addListener(_onTabSelection);
   }
 
   @override
@@ -38,7 +38,7 @@ class _TabBarWidgetState extends State<TabBarWidget>
     super.dispose();
   }
 
-  void _handleTabSelection() {
+  void _onTabSelection() {
     int tabIndex = _tabController.index;
     if (widget.onTabChanged != null) {
       widget.onTabChanged!(tabIndex);

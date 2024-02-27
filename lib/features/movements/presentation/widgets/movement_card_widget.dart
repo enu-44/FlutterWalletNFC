@@ -1,100 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:pago_facil_app/core/core.dart';
-import 'package:pago_facil_app/features/movements/movements.dart';
+import 'package:pago_facil_app/layers/layers.dart';
 
 class MovementCardWidget extends StatelessWidget {
-  const MovementCardWidget(
-      {super.key,
-      required this.title,
-      required this.movementDate,
-      required this.movementType,
-      required this.amount,
-      required this.concept,
-      required this.referencia});
+  const MovementCardWidget({super.key, required this.movement});
 
-  final String title;
-  final DateTime movementDate;
-  final MovementType movementType;
-  final double amount;
-  final String concept;
-  final String referencia;
-
+  final Movement movement;
   @override
   Widget build(BuildContext context) {
     return ExpandCardWidget(
-      leading: _buildIcon(),
+      leading: _buildIconMovement(),
       title: Row(
         children: [
-          Expanded(child: Text(title)),
+          Expanded(child: Text(movement.title)),
           Text(
-            CapitalizeUtils.capitalize(
-                DateFormatUtils.convertToTimeLine(movementDate)),
+            DateFormatUtils.convertToTimeLine(movement.date),
             style: const TextStyle(fontSize: 12.0),
           ),
         ],
       ),
       subtitle: Row(
         children: [
-          Expanded(child: Text(movementType.value)),
+          Expanded(child: Text(movement.movementTypeName)),
           Text(
-            MoneyFormatUtils.getMoneyFormat(value: amount),
+            MoneyFormatUtils.getMoneyFormat(value: movement.amount),
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20.0,
-                color: _buildTextColor()),
+                color: _buildColorMovement()),
           ),
         ],
       ),
       childExpand: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Concepto",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(concept),
-          const Text(
-            "Fecha",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(DateFormatUtils.convertToDateHour(movementDate)),
-          const Text(
-            "Referencia",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(referencia)
+          _buildTitle("Concepto"),
+          Text(movement.concept),
+          _buildTitle("Fecha"),
+          Text(DateFormatUtils.convertToDateHour(movement.date)),
+          _buildTitle("Referencia"),
+          Text(movement.referencia)
         ],
       ),
     );
   }
 
-  Color _buildTextColor() {
-    final color = <MovementType, Color>{
-      MovementType.envio: Palette.red,
-      MovementType.recepcion: Palette.primary,
-      MovementType.recarga: Palette.primary
+  Widget _buildTitle(String label) => Text(
+        label,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      );
+
+  Widget _buildIconMovement() {
+    final icon = <MovementType, Widget>{
+      MovementType.sending: _buildIcon(Icons.arrow_downward),
+      MovementType.reception: _buildIcon(Icons.arrow_upward),
+      MovementType.recharge: _buildIcon(Icons.arrow_upward)
     };
-    return color[movementType] ?? Palette.primary;
+    return icon[movement.movementType] ?? const Icon(Icons.circle);
   }
 
-  Widget _buildIcon() {
-    final icon = <MovementType, Widget>{
-      MovementType.envio: const Icon(
-        Icons.arrow_downward,
-        color: Palette.red,
-        size: 30.0,
-      ),
-      MovementType.recepcion: const Icon(
-        Icons.arrow_upward,
-        color: Palette.primary,
-        size: 30.0,
-      ),
-      MovementType.recarga: const Icon(
-        Icons.arrow_upward,
-        color: Palette.primary,
-        size: 30.0,
-      )
+  Color _buildColorMovement() {
+    final color = <MovementType, Color>{
+      MovementType.sending: Palette.red,
+      MovementType.reception: Palette.primary,
+      MovementType.recharge: Palette.green
     };
-    return icon[movementType] ?? const Icon(Icons.circle);
+    return color[movement.movementType] ?? Palette.primary;
   }
+
+  Widget _buildIcon(IconData icon) => Icon(
+        icon,
+        color: _buildColorMovement(),
+        size: 30.0,
+      );
 }

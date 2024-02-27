@@ -10,8 +10,8 @@ class SplashScreen extends StatelessWidget {
     return BlocListener<SplashCubit, SplashState>(
       listener: (context, state) {
         if (state is SplashEnd) {
-          Navigator.pushReplacementNamed(
-              context, AppRoutes.phoneAuthVerfication);
+          Navigator.pushNamedAndRemoveUntil(
+              context, AppRoutes.phoneAuthVerfication, (_) => false);
         }
       },
       child: Scaffold(

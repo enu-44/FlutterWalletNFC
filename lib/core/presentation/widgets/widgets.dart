@@ -11,3 +11,5 @@ export 'inputs/inputs.dart';
 export 'tabbar_widgget.dart';
 export 'badget_widget.dart';
 export 'alert_dialog_widget.dart';
+export 'unsupported_nfc_widget.dart';
+export 'empty_widget.dart';

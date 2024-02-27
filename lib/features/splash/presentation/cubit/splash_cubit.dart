@@ -5,12 +5,10 @@ import 'package:pago_facil_app/features/splash/splash.dart';
 class SplashCubit extends Cubit<SplashState> {
   SplashCubit() : super(SplashState.initial());
 
-  Future<void> onSignIn() async {
+  Future<void> onSetup() async {
     Timer(
-      const Duration(seconds: 5),
-      () async {
-        emit(SplashState.finished());
-      },
+      const Duration(seconds: 3),
+      () => emit(SplashState.finished()),
     );
   }
 }
