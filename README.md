@@ -21,3 +21,11 @@ flutter run build_runner build --delete-conflicting-outputs
 ```sh
 flutter run
 ```
+
+## Build APK🚀
+
+> To run use the launch configuration in VSCode/Android Studio or use the following commands:
+
+```sh
+flutter build apk --release
+```
