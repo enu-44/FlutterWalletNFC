@@ -8,6 +8,7 @@ A new Flutter project.
 > Now you must execute the following commands to obtain the packages and generate the necessary code:
 
 ```sh
+cd _project name_
 flutter clean
 flutter pub get
 flutter run build_runner build --delete-conflicting-outputs

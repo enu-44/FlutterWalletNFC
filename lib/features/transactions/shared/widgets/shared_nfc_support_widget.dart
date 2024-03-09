@@ -15,7 +15,8 @@ class SharedNfcSupportWidget extends StatelessWidget {
         future: NfcUtils.isAvailable(),
         builder: (_, snap) {
           if (snap.data == false) {
-            if (shouldShowUnsupported?.call() == false) return const SizedBox();
+            if (shouldShowUnsupported?.call() == false)
+              return const SizedBox.shrink();
             return const Center(child: UnsupportedNfcWidget());
           }
           return buildContent();

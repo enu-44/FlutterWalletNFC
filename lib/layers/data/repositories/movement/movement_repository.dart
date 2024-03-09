@@ -13,7 +13,8 @@ class MovementRepository implements IMovementRepository {
         jsonParser: (json) => MovementResponseDto.fromListJson(json));
     if (!result.isSuccess) return _failure(result);
     final data = result.success().data ?? [];
-    return Right(data.map((e) => e.toDom()).toList());
+    final resultDom = data.map((e) => e.toDom()).toList();
+    return Right(resultDom);
   }
 
   Left<Failure, T> _failure<T>(HttpResult result) =>

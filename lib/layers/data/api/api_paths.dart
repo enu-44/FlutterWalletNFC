@@ -1,6 +1,6 @@
 class APIPaths {
   const APIPaths._();
-  static const baseUrl = 'https://3f74-179-1-128-40.ngrok-free.app';
+  static const baseUrl = 'https://wfb6lt14-8000.use2.devtunnels.ms';
   // Auth
   static const String verifyPhone = 'api/users/verific-phone/';
   static const String verifyPassword = 'api/auth/login/';
